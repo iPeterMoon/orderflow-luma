@@ -16,6 +16,34 @@ class OrderServiceTest {
         assertEquals("student-1", o.customerId());
     }
 
+    @Test 
+    void rejectsNullCustomerId() {
+        var s = new OrderService();
+        String customerId = null;
+        BigDecimal total = new BigDecimal("150.00");
+        assertThrows(IllegalArgumentException.class, () -> s.create(customerId, total));
+    }
+
+    @Test 
+    void rejectsBlankCustomerId() {
+        var s = new OrderService();
+        String customerId = "";
+        BigDecimal total = new BigDecimal("150.00");
+        assertThrows(IllegalArgumentException.class, () -> s.create(customerId, total));
+    }
+    
+    @Test 
+    void rejectsNullTotal() {
+        var s = new OrderService();
+        assertThrows(IllegalArgumentException.class, () -> s.create("student-1", null));
+    }
+
+    @Test 
+    void rejectsZeroTotal() {
+        var s = new OrderService();
+        assertThrows(IllegalArgumentException.class, () -> s.create("student-1", BigDecimal.ZERO));
+    }
+    
     @Test
     void rejectsNegativeTotal() {
         var s = new OrderService();
