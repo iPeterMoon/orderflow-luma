@@ -18,35 +18,11 @@ entrega, despliega, aprovisiona y observa mediante prácticas DevOps reproducibl
 - Maven 3.9+
 - Git
 
+SECRETS:
+- SONAR_TOKEN (GitHub Actions)
+- SONAR_HOST_URL (GitHub Actions)
+
 Más adelante: Docker, AWS CLI, Terraform, Minikube, kubectl y Kompose.
-
-## Bootstrap del repositorio del equipo
-
-Cada equipo crea en la Sesión 1 su propio repositorio GitHub, por ejemplo `orderflow-equipo-03`. Ese repositorio será la
-**source of truth** durante todo el semestre.
-
-Importen el starter y creen el baseline:
-
-```bash
-git init
-git add .
-git commit -m "chore: import OrderFlow baseline"
-git branch -M main
-git remote add origin <URL>
-git push -u origin main
-```
-
-Otro integrante verifica la reproducibilidad desde un fresh clone:
-
-```bash
-git clone <URL>
-cd <repo>
-git log --oneline -1
-mvn clean test
-mvn package
-```
-
-Branching formal inicia en Semana 2. Pull Requests, Code Review y quality gates inician en Semana 3.
 
 ## Baseline
 
@@ -63,6 +39,18 @@ curl http://localhost:8080/actuator/health
 Invoke-RestMethod -Uri "http://localhost:8080/api/orders" -Method Post -ContentType "application/json" -Body '{"customerId":"team-demo","total":150.00}'
 curl http://localhost:8080/api/orders
 ```
+
+## Análisis de calidad (SonarQube)
+
+El proyecto usa SonarQube Server en un servidor self-host en un equipo de uno de los integrantes, se utiliza para análisis estático y de cobertura con JaCoCo. Para correrlo localmente:
+
+``` bash
+mvn clean verify
+mvn sonar:sonar -Dsonar.host.url=<SONAR_HOST_URL> -Dsonar.token=<SONAR_TOKEN>
+```
+
+El análisis en CI corre automáticamente vía GitHub Actions en cada Pull Request hacia  `main`/`develop`
+(ver `.github/workflows/calidad.yml`).
 
 ## Evidencia acumulativa
 
