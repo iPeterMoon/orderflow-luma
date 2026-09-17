@@ -36,11 +36,4 @@ public class OrderService {
         return Optional.ofNullable(orders.get(id));
     }
 
-    public void unusedMethodWithBug(String param) {
-        param.toLowerCase();
-        try {
-            Thread.sleep(100);
-        } catch (Exception e) {
-        }
-    }
 }
