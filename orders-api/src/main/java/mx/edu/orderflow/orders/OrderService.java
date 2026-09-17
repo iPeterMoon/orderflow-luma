@@ -18,8 +18,10 @@ public class OrderService {
     private final AtomicLong ids = new AtomicLong(1000);
 
     public synchronized Order create(String customerId, BigDecimal total) {
-        if (customerId == null || customerId.isBlank()) throw new IllegalArgumentException("customerId required");
-        if (total == null || total.signum() <= 0) throw new IllegalArgumentException("total must be positive");
+        if (customerId == null || customerId.isBlank())
+            throw new IllegalArgumentException("customerId required");
+        if (total == null || total.signum() <= 0)
+            throw new IllegalArgumentException("total must be positive");
         long id = ids.incrementAndGet();
         Order o = new Order(id, customerId, total, OrderStatus.CREATED);
         orders.put(id, o);
@@ -33,4 +35,5 @@ public class OrderService {
     public synchronized Optional<Order> find(long id) {
         return Optional.ofNullable(orders.get(id));
     }
+
 }
