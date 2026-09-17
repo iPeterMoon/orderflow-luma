@@ -11,7 +11,7 @@ Integrantes:
 
 **Repositorio:** https://github.com/iPeterMoon/orderflow-luma
 
-**Commit de entrega:** 
+**Commit de entrega:** 7124bb1
 
 ## Flujo
 **Evento (on):** Se dispara en pull_request hacia main o develop, y en push hacia main o develop especificando los tipos opened, synchronize y reopened.
