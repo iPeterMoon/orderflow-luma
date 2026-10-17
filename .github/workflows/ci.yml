@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - '**'
+  pull_request:
+    branches: [ develop, main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build y pruebas (Maven)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v6
+
+      - name: Preparar Java 21 (Temurin) y cache de Maven
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build y pruebas
+        run: mvn -B verify
+
+      - name: Publicar los reportes de pruebas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/
+          if-no-files-found: warn
