@@ -1,11 +1,11 @@
-name: Build
+name: Calidad
 
 on:
   pull_request:
     branches: [ main, develop ]
+    types: [opened, synchronize, reopened]
   push:
     branches: [ main, develop ]
-    types: [opened, synchronize, reopened]
 
 jobs:
   build:
