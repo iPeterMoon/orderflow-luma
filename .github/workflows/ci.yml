@@ -27,6 +27,9 @@ jobs:
       - name: Build y pruebas
         run: mvn -B verify
 
+      - name: Construir imagen Docker con SHA del commit
+        run: docker build --tag orderflow:${{ github.sha }} .
+
       - name: Publicar los reportes de pruebas
         if: always()
         uses: actions/upload-artifact@v4
@@ -34,3 +37,4 @@ jobs:
           name: surefire-reports
           path: target/surefire-reports/
           if-no-files-found: warn
+
