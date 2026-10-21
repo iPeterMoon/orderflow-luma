@@ -43,7 +43,7 @@ jobs:
           registry: ${{ secrets.NEXUS_DOCKER_REGISTRY }}
 
       - name: Construir imagen Docker con SHA del commit
-        run: docker build --tag orderflow:${{ github.sha }} .
+        run: docker build --tag ${{ secrets.NEXUS_DOCKER_REGISTRY }}/orderflow:${{ github.sha }} .
 
 
       - name: Publicar la imagen Docker en Nexus
