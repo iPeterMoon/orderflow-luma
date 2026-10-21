@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Descargar el codigo del repositorio
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Preparar Java 21 (Temurin) y cache de Maven
         uses: actions/setup-java@v4
@@ -27,8 +27,25 @@ jobs:
       - name: Build y pruebas
         run: mvn -B verify
 
+      - name: Configurar Docker para aceptar HTTP
+        run: |
+          sudo mkdir -p /etc/docker
+          echo '{\"insecure-registries\":[\"${{ secrets.NEXUS_DOCKER_REGISTRY }}\"]}' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: Iniciar sesión en Nexus Docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.NEXUS_DOCKER_USERNAME }}
+          password: ${{ secrets.NEXUS_DOCKER_PASSWORD }}
+          registry: ${{ secrets.NEXUS_DOCKER_REGISTRY }}
+
       - name: Construir imagen Docker con SHA del commit
         run: docker build --tag orderflow:${{ github.sha }} .
+
+
+      - name: Publicar la imagen Docker en Nexus
+        run: docker push ${{ secrets.NEXUS_DOCKER_REGISTRY }}/orderflow:${{ github.sha }}
 
       - name: Publicar los reportes de pruebas
         if: always()
