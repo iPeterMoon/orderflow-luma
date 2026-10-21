@@ -30,7 +30,9 @@ jobs:
       - name: Configurar Docker para aceptar HTTP
         run: |
           sudo mkdir -p /etc/docker
-          echo '{\"insecure-registries\":[\"${{ secrets.NEXUS_DOCKER_REGISTRY }}\"]}' | sudo tee /etc/docker/daemon.json
+          cat <<EOF | sudo tee /etc/docker/daemon.json
+          {"insecure-registries":["${{ secrets.NEXUS_DOCKER_REGISTRY }}"]}
+          EOF
           sudo systemctl restart docker
 
       - name: Iniciar sesión en Nexus Docker
